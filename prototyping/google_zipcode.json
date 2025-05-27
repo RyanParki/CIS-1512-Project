@@ -1,0 +1,101 @@
+{
+   "plus_code" : 
+   {
+      "compound_code" : "FVM5+F4J Royal Oak, MI, USA",
+      "global_code" : "86JRFVM5+F4J"
+   },
+   "results" : 
+   [
+      {
+         "address_components" : 
+         [
+            {
+               "long_name" : "48067",
+               "short_name" : "48067",
+               "types" : 
+               [
+                  "postal_code"
+               ]
+            },
+            {
+               "long_name" : "Royal Oak",
+               "short_name" : "Royal Oak",
+               "types" : 
+               [
+                  "locality",
+                  "political"
+               ]
+            },
+            {
+               "long_name" : "Oakland County",
+               "short_name" : "Oakland County",
+               "types" : 
+               [
+                  "administrative_area_level_2",
+                  "political"
+               ]
+            },
+            {
+               "long_name" : "Michigan",
+               "short_name" : "MI",
+               "types" : 
+               [
+                  "administrative_area_level_1",
+                  "political"
+               ]
+            },
+            {
+               "long_name" : "United States",
+               "short_name" : "US",
+               "types" : 
+               [
+                  "country",
+                  "political"
+               ]
+            }
+         ],
+         "formatted_address" : "Royal Oak, MI 48067, USA",
+         "geometry" : 
+         {
+            "bounds" : 
+            {
+               "northeast" : 
+               {
+                  "lat" : 42.510634,
+                  "lng" : -83.11183799999999
+               },
+               "southwest" : 
+               {
+                  "lat" : 42.474471,
+                  "lng" : -83.18407809999999
+               }
+            },
+            "location" : 
+            {
+               "lat" : 42.4922946,
+               "lng" : -83.13273319999999
+            },
+            "location_type" : "APPROXIMATE",
+            "viewport" : 
+            {
+               "northeast" : 
+               {
+                  "lat" : 42.510634,
+                  "lng" : -83.11183799999999
+               },
+               "southwest" : 
+               {
+                  "lat" : 42.474471,
+                  "lng" : -83.18407809999999
+               }
+            }
+         },
+         "place_id" : "ChIJZxtf0mjPJIgRI9qKOerDJgA",
+         "types" : 
+         [
+            "postal_code"
+         ]
+      }
+   ],
+   "status" : "OK"
+}
