@@ -50,11 +50,11 @@ def create_app():
 
         return [color[0] for color in res.fetchall()]
 
-    def fred_random_flower(db_cur, color):
+    def fred_random_flower(db_cur, color, count):
         res = db_cur.execute(f"""
             SELECT * FROM fred_flower_colors
             WHERE color='{color}'
-            ORDER BY RANDOM() LIMIT 1
+            ORDER BY RANDOM() LIMIT {count}
             """)
 
         return res.fetchall()
@@ -99,7 +99,7 @@ def create_app():
     @app.route('/api/fred-plant', methods=['POST'])
     def api_fred_plant():
         print(f"User selected: {request.form.get('choice')}")
-        flower = fred_random_flower(sqa_db.session, request.form.get('choice'))
+        flower = fred_random_flower(sqa_db.session, request.form.get('choice'), 1)
         flower = f"Your {request.form.get('choice')} flower is family: {flower[0][2]}, genus: {flower[0][3]}, species: {flower[0][4]}."
         return flower, 200
 
