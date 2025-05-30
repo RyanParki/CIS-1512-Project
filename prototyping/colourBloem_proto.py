@@ -13,17 +13,22 @@ import os
 import sqlite3
 import requests
 import re
+import random
+import json
+import webcolors
 
 # Init SQLAlchemy outside of the Flask thread
 sqa_db = SQLAlchemy()
 
 # This can be a class e.g. Config 
-PEREUNAL_API_KEY = os.environ.get('PERENUAL_API_KEY')
-PEREUNAL_API     = 'https://perenual.com/api/v2/species-list'
-GOOGLE_API_KEY   = os.environ.get('GOOGLE_GEOLOC_API')
-GOOGLE_MAPS_API  = 'https://maps.googleapis.com/maps/api/geocode/json'
-UA_STRING        = 'student project'
-DB               = 'colourBloem_db.db'
+PEREUNAL_API_KEY  = os.environ.get('PERENUAL_API_KEY')
+PEREUNAL_API      = 'https://perenual.com/api/v2/species-list'
+GOOGLE_API_KEY    = os.environ.get('GOOGLE_GEOLOC_API')
+GOOGLE_MAPS_API   = 'https://maps.googleapis.com/maps/api/geocode/json'
+GOOGLE_SEARCH_API = 'https://www.googleapis.com/customsearch/v1'
+GOOGLE_SEARCH_ENG = os.environ.get('GOOGLE_CUSTOM_SEARCHENGINE')
+UA_STRING         = 'student project'
+DB                = 'colourBloem_db.db'
 
 def create_app():
     app = Flask(__name__, template_folder='.')
@@ -88,6 +93,29 @@ def create_app():
         zone_gen = re.sub('[^0-9]', '', zone) # Strip all non-digits from string.
         return zone_gen
 
+    # later we might want to add size to the query, so we don't get massive images
+    def query_google_images(color, search, count):
+        headers = {'User-Agent': UA_STRING}
+        params = {
+            'searchType': 'image',
+            'imageColorType': 'color',
+            'ImgDominantColor': color,
+            'q': search,
+            'cx': GOOGLE_SEARCH_ENG,
+            'key': GOOGLE_API_KEY
+        }
+        result = requests.get(GOOGLE_SEARCH_API, headers=headers, params=params)
+        print(f"querying google: {result.url}")
+        result.raise_for_status()
+        data = result.json()
+        links = []
+        # random selection of $count images from search results (make sure mime-type is image/something)
+        for image in random.sample([image['link'] if 'image' in image['mime'] else None for image in data['items']], count):
+            links.append(image)
+
+        print(f"Found {count} google images: {links}")
+        return links
+
     def query_pereunal(zone_string, species, hardiness):
         return 'poop'
 
@@ -95,13 +123,33 @@ def create_app():
     def home():
         return render_template('index.html', color_list=fred_colors_avail(sqa_db.session))
 
+    @app.route('/api/fred-colors', methods=['GET'])
+    def api_fred_colors():
+        colors = fred_colors_avail(sqa_db.session)
+        colors = list(map(lambda c: {'color': webcolors.name_to_hex(c), 'name': c}, colors))
+        print(colors)
+        return json.dumps(colors), 200
+        
+
+    # this is bad and will be refactored.
     # /api/fred-plant takes a color and returns a flower
     @app.route('/api/fred-plant', methods=['POST'])
     def api_fred_plant():
-        print(f"User selected: {request.form.get('choice')}")
-        flower = fred_random_flower(sqa_db.session, request.form.get('choice'), 1)
-        flower = f"Your {request.form.get('choice')} flower is family: {flower[0][2]}, genus: {flower[0][3]}, species: {flower[0][4]}."
-        return flower, 200
+        img_count = 4
+        color = request.form.get('choice')
+        print(f"api-fred-plant: user selected {color}")
+        flower = fred_random_flower(sqa_db.session, color, 1)
+        flower = ' '.join(list(flower[0])[2:5])
+        print(f"flower is: {flower}")
+        # the google query must be qualified with "flower" or you will see weird things
+        query = f"{flower} flower"
+        print(f"querying {img_count} images for \"{query}\" in {color}")
+        data = {}
+        data['flower'] = flower
+        data['pics'] = query_google_images(color, query, 4)
+        print(f"rendering a template with {data}")
+        return render_template('plant-pics-n-div.html', data=data)
+        
 
     @app.route('/api/browser-location-zip', methods=['POST'])
     def api_browser_location_zip():
@@ -122,7 +170,7 @@ def create_app():
         zone_range = query_usda_hardiness(sqa_db.session, zipcode)
         return '1-13', 200
 
-    # GET endpoint: Returns a simple message
+    # health check
     @app.route('/api/hello', methods=['GET'])
     def hello():
         return jsonify({'message': 'Hello from the Flask server!'}), 200

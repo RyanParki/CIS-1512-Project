@@ -2,7 +2,10 @@
 <html>
     <head>
         <title>colourBloem Prototype - CIS 1512</title>
+        <link rel="icon" href="{{ url_for('static', filename='favicon.png') }}" type="image/x-icon">
         <script src="https://unpkg.com/htmx.org@2.0.2"></script>
+        <script src="{{ url_for('static', filename='colorPicker.js') }}"></script>
+        <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='colourBloem_style.css') }}"/>
     </head>
     <body>
         <div id="header">
@@ -12,7 +15,7 @@
         </div>
         <div id="example_db_query">
             <p>
-                <h3>Available colors from FReD data: {{ color_list | join(', ')}}</h3>
+                Available colors from FReD data: {{ color_list | join(', ')}}
             </p>
         </div>
     <!-- The browser location area -->
@@ -23,8 +26,22 @@
             <input type="hidden" name="latitude" id="latitude">
             <input type="hidden" name="longitude" id="longitude">
         </form>
-    <!-- The FReD flower picker area -->
+
+    <!-- The fancy colorPicker widget area -->
+        <!-- Color Picker Container -->
+        <div class="color-picker-container">
+            <div id="colorGrid" class="color-grid">
+                <div class="loading">Loading colors...</div>
+            </div>
+        </div>
+        <!-- Hidden form for htmx color call -->
+        <form id="colorForm" hx-post="/api/fred-plant" hx-target="#plant-response" hx-swap="innerHTML">
+            <input type="hidden" id="choice" name="choice">
+        </form>
+
+    <!-- The FReD flower picker area - the old one
         <div id="htmx_form_stuff">
+            old color picker:
             <select name="choice" id="color-choice">
                 {% for color in color_list %}
                 <option value="{{ color }}">{{ color }}</option>
@@ -36,17 +53,11 @@
                     hx-swap="innerHTML">
                 Select
             </button>
-        </div>
+        </div>-->
+
         <div id="plant-response">
             <!-- API response will be rendered here -->
         </div>
-        <div id="plant-pics">
-            <!-- some google images pics of plants will render here. -->
-
-        </div>
-    <!-- The whatevers next area -->
-
-
 
         <div id="footer">
             <p>

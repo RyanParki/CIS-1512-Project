@@ -3,3 +3,4 @@ celery==5.3.6
 redis==5.0.1
 flower==1.2.0
 requests==2.31.0
+webcolors
