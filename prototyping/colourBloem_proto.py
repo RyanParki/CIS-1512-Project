@@ -20,7 +20,7 @@ import webcolors
 # Init SQLAlchemy outside of the Flask thread
 sqa_db = SQLAlchemy()
 
-# This can be a class e.g. Config 
+# This can be a class e.g. Config. Do not store credentials in git.
 PEREUNAL_API_KEY  = os.environ.get('PERENUAL_API_KEY')
 PEREUNAL_API      = 'https://perenual.com/api/v2/species-list'
 GOOGLE_API_KEY    = os.environ.get('GOOGLE_GEOLOC_API')

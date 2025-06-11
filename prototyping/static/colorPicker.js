@@ -1,13 +1,13 @@
-// Sample data - replace with fred colors.
+// Sample data from dev - replaced with fred colors.
 const colorData = [
-    { color: '#FF6B6B', name: 'Coral Red' },
+    { color: '#FF6B6B', name: 'Red' },
     { color: '#4ECDC4', name: 'Turquoise' },
-    { color: '#45B7D1', name: 'Sky Blue' },
-    { color: '#96CEB4', name: 'Mint Green' },
-    { color: '#FECA57', name: 'Sunflower' },
+    { color: '#45B7D1', name: 'Blue' },
+    { color: '#96CEB4', name: 'Green' },
+    { color: '#FECA57', name: 'Yellow' },
     { color: '#FF9FF3', name: 'Pink' },
-    { color: '#54A0FF', name: 'Ocean Blue' },
-    { color: '#48DBFB', name: 'Light Blue' },
+    { color: '#54A0FF', name: 'Blue' },
+    { color: '#48DBFB', name: 'Blue' },
     { color: '#A29BFE', name: 'Lavender' },
     { color: '#FD79A8', name: 'Rose' },
     { color: '#FDCB6E', name: 'Orange' },
