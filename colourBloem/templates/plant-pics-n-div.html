@@ -1,0 +1,12 @@
+<div class="flower-gallery">
+
+    <h2 class="flower-gallery-title">{{ data['flower'] }}</h2>
+    <p>four random google images, maybe we should use the first four</p>
+    <p><i>colors may vary by region</i></p>
+    <div class="flower-grid">
+        {% for flower in data['pics'] %}
+        <img src="{{ flower }}">
+        {% endfor %}
+    </div>
+  
+  </div>

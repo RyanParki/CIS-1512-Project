@@ -1,0 +1,139 @@
+<!-- prototype for colourBloem -->
+<html>
+    <head>
+        <title>colourBloem CIS 1512</title>
+        <link rel="icon" href="{{ url_for('static', filename='favicon.png') }}" type="image/x-icon">
+        <script src="https://unpkg.com/htmx.org@2.0.2"></script>
+        <script src="{{ url_for('static', filename='colorPicker.js') }}"></script>
+        <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='colourBloem_style.css') }}"/>
+    </head>
+    <body>
+        <div id="header">
+            <p>
+                <h1>colourBloem Prototype - CIS 1512</h1>
+            </p>
+        </div>
+        <div id="example_db_query">
+            <p>
+                Available colors from FReD data: {{ color_list | join(', ')}}
+            </p>
+        </div>
+    <!-- The browser location area -->
+        <div id="response">
+            Loading location data...
+        </div>
+        <form id="location-form" hx-post="/api/browser-location-zip" hx-target="#response" hx-swap="innerHTML">
+            <input type="hidden" name="latitude" id="latitude">
+            <input type="hidden" name="longitude" id="longitude">
+        </form>
+
+    <!-- The fancy colorPicker widget area -->
+        <!-- Color Picker Container -->
+        <div class="color-picker-container">
+            <div id="colorGrid" class="color-grid">
+                <div class="loading">Loading colors...</div>
+            </div>
+        </div>
+        <!-- Hidden form for htmx color call -->
+        <form id="colorForm" hx-post="/api/fred-plant-display" hx-target="#plant-response" hx-swap="innerHTML">
+            <input type="hidden" id="choice" name="choice">
+        </form>
+
+    <!-- The FReD flower picker area - the old one
+        <div id="htmx_form_stuff">
+            old color picker:
+            <select name="choice" id="color-choice">
+                {% for color in color_list %}
+                <option value="{{ color }}">{{ color }}</option>
+                {% endfor %}
+            </select>
+            <button hx-post="/api/fred-plant"
+                    hx-include="[name='choice']"
+                    hx-target="#plant-response"
+                    hx-swap="innerHTML">
+                Select
+            </button>
+        </div>-->
+
+        <div id="plant-response">
+            <!-- API response will be rendered here -->
+             plant here
+        </div>
+
+        <div id="footer">
+            <p>
+                <h6> Credits:
+                    <ul>
+                        <li>Group 1 Developers
+                            <ul>
+                                <li>Mikey</li>
+                                <li>Ryan</li>
+                                <li>Dyamond</li>
+                                <li>Jett</li>
+                                <li>David</li>
+                            </ul>
+                        </li>
+                        <li>Data Sources
+                            <ul>
+                                <li>FReD Flower Reflectance Database (heavily sanitized)</li>
+                                <li>USDA Plant Hardiness Zones</li>
+                                <li>Perenual.com Plant API</li>
+                                <li>Google Location API</li>
+                            </ul>
+                        </li>
+                        <li>Backend
+                            <ul>
+                                <li>sqlite3</li>
+                                <li>Python Flask</li>
+                            </ul>
+                        </li>
+                        <li>Frontend
+                            <ul>
+                                <li>htmx</li>
+                                <li>some css framework we haven't picked out yet</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </h6>
+            </p>   
+
+        </div>
+    </body>
+
+    <!-- This script is a bit of a hack, it basically populates the hidden form above with the browser's location.
+         The hidden htmx form will post itself to the api endpoint for /api/browser-location-zip to get a zipCode.
+      -->
+      <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const responseDiv = document.getElementById('response');
+            const latitudeInput = document.getElementById('latitude');
+            const longitudeInput = document.getElementById('longitude');
+    
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        // Set form input values
+                        latitudeInput.value = position.coords.latitude;
+                        longitudeInput.value = position.coords.longitude;
+    
+                        // Manually trigger HTMX AJAX request
+                        htmx.ajax('POST', '/api/browser-location-zip', {
+                            target: '#response',
+                            swap: 'innerHTML',
+                            values: {
+                                latitude: position.coords.latitude,
+                                longitude: position.coords.longitude
+                            }
+                        });
+                    },
+                    (error) => {
+                        // Handle geolocation errors
+                        responseDiv.innerHTML = `<p>Error getting location: ${error.message}</p>`;
+                    }
+                );
+            } else {
+                responseDiv.innerHTML = '<p>Geolocation is not supported by this browser.</p>';
+            }
+        });
+    </script>
+</html>
