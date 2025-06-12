@@ -110,11 +110,7 @@ def create_app():
         data = result.json()
         links = []
         # random selection of $count images from search results (make sure mime-type is image/something)
-        for image in random.sample([image['link'] if 'image' in image['mime'] else None for image in data['items']], count):
-            links.append(image)
-
-        print(f"Found {count} google images: {links}")
-        return links
+        return random.sample([image['link'] if 'image' in image['mime'] else None for image in data['items']], count)
 
     def query_pereunal(zone_string, species, hardiness):
         return 'poop'
