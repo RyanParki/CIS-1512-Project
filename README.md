@@ -7,6 +7,16 @@ It is recommended but not required that install this in a Python virtualenv.
 3. Set environment variables (api keys and such, see below.)
 3. Run run.py
 
+## Testing
+### Unit tests
+pytest is used for unit tests. pytest-mock is included for mocking web requests (for external API queries).
+* *tests/conftest.py* sets up the test harness
+* *tests/test_internal_data.py* contains tests for FReD and USDA data
+* more to come...
+* To run the tests, use *pytest -sv*
+### Additional tests
+* We have no tests for the code paths that run in the browser (js stuff)
+* The professor recommended Selenium during lecture?
 ## Project Layout (may change)
 ```
 ├── colourBloem
@@ -25,6 +35,7 @@ It is recommended but not required that install this in a Python virtualenv.
 │       └── plant-pics-n-div.html   # plant display
 ├── colourBloem.db                # sqlite3 DB
 ├── prototyping                   # prototyping work
+├── tests                         # tests
 ├── README.md                      
 ├── requirements.txt              # additional python modules not in the stdlib.
 ├── run.py                        # entrypoint script for running the application.
