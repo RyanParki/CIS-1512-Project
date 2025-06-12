@@ -15,8 +15,6 @@ class FredFlower():
             ORDER BY RANDOM() LIMIT 1
         """)
         return ' '.join(list(res.fetchall()[0][2:5]))
-        #return res.fetchall()
-
 
 class USDAHardinessZone():
     def lookup(db_cursor, zip):

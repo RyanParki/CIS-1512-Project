@@ -68,7 +68,6 @@ class SearchAPI(BaseAPI):
         self.logger.debug(f"Flower Image Links: {pics}")
         return pics
 
-
 class PerenualAPI(BaseAPI):
     def __init__(self):
         super().__init__(Config.GOOGLE_SEARCH_API, Config.GOOGLE_API_KEY)

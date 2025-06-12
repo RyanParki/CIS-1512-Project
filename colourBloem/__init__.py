@@ -7,7 +7,7 @@ from .config import Config
 
 # The database object cannot live inside the Flask thread.
 # It is created here as a SQLAlchemy object, which is flask-aware.
-# SQLAlchemy does a lot more, but we just use it so Flask can talk to the DB.
+# SQLAlchemy is used for context management only. We are not modeling our static, externally-managed DB with it.
 sqa_db = SQLAlchemy()
 
 def create_app():
