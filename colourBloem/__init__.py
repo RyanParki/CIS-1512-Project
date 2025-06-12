@@ -10,12 +10,15 @@ from .config import Config
 # SQLAlchemy is used for context management only. We are not modeling our static, externally-managed DB with it.
 sqa_db = SQLAlchemy()
 
+
 def create_app():
     # Initial setup and config
-    logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
+    logging.basicConfig(
+        level=logging.DEBUG, format="%(asctime)s - %(levelname)s - %(message)s"
+    )
     app = Flask(__name__)
     app.config.from_object(Config)
-    
+
     # Database setup and verification using inspector
     app.logger.debug(f"Connecting to {app.config['SQLALCHEMY_DATABASE_URI']}")
     sqa_db.init_app(app)
@@ -28,14 +31,8 @@ def create_app():
     # Blueprints are a flask feature that lets you group routes.
     from .routes.main import view_bp
     from .routes.main import controller_bp
+
     app.register_blueprint(view_bp)
     app.register_blueprint(controller_bp)
 
     return app
-
-
-    
-
-
-
-
