@@ -46,8 +46,7 @@ class GeocachingAPI(BaseAPI):
             }
         )
         req = self._make_request(self.base_url, self.params)
-        zip = req["results"][0]["address_components"][0]["long_name"]
-        return zip
+        return req["results"][0]["address_components"][0]["long_name"]
 
 
 class SearchAPI(BaseAPI):
