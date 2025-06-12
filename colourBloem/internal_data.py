@@ -14,7 +14,8 @@ class FredFlower():
             WHERE color='{color}'
             ORDER BY RANDOM() LIMIT 1
         """)
-        return res.fetchall()
+        return ' '.join(list(res.fetchall()[0][2:5]))
+        #return res.fetchall()
 
 
 class USDAHardinessZone():

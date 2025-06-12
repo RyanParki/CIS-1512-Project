@@ -11,14 +11,13 @@ logger = logging.getLogger(__name__)
 view_bp = Blueprint('view', __name__)
 controller_bp = Blueprint('controller', __name__)
 
-# Instantiate the various external API query classes.
-#flower_api = PerenualAPI()
+#flower_api = PerenualAPI() # pending some UI design work
 maps_api = GeocachingAPI()
-#search_api = SearchAPI()
+search_api = SearchAPI()
 
 @view_bp.route('/', methods=['GET'])
 def index():
-    return render_template('index.html')
+    return render_template('index.html'), 200
 
 @view_bp.route('/api/fred-plant-display', methods=['POST'])
 def get_fred_flower():
@@ -28,12 +27,15 @@ def get_fred_flower():
     """
     color = request.form.get('choice')
     flower = FredFlower.fred_random_flower(sqa_db.session, color)
-    flower = ' '.join(list(flower[0][2:5]))
-    logger.debug(f"User selected {color}, fredDB fetched {flower}")
-
-    #return render_template('plant-pics-n-div.html', data=data)
-    return f"render the template here for {flower}"
-
+    logger.info(f"User selected {color}, fredDB fetched {flower}")
+    # Hardcoding this to picsum so nobody runs up my GCP bill.
+    # pics = search_api.query(flower, color, 4)
+    pics = [pic for pic in ['https://picsum.photos/200'] for _ in range(4)]
+    logger.info(f"Flower image links: {pics}")
+    return render_template('plant-pics-n-div.html', data={
+        'flower': flower,
+        'pics': pics
+    }), 200
 
 @controller_bp.route('/api/fred-colors', methods=['GET'])
 def get_flower_colors():
@@ -44,7 +46,7 @@ def get_flower_colors():
     """
     colors = FredFlower.fred_colors_avail(sqa_db.session)
     colors = list(map(lambda c: {'color': webcolors.name_to_hex(c), 'name': c}, colors))
-    return colors
+    return colors, 200
 
 # is this supposed to be a view function instead? depends on UI design.
 # maybe there is a similar view function that renders a div for the initial "your zone is.."
@@ -60,11 +62,10 @@ def get_hardiness_zone():
     zone = USDAHardinessZone.lookup(sqa_db.session, zipcode)
     return f"ur zone is {zone}", 200
 
-
 @controller_bp.route('/api/hello', methods=['GET'])
 def hello():
     """
     Test that everything has ostensibly loaded properly.
     """
     logger.debug('Hello from the test endpoint')
-    return('<p> hello from the controller api blueprint, it works </p>')
+    return '<p> hello from the controller api blueprint, it works </p>', 200

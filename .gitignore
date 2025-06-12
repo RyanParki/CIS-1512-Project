@@ -12,3 +12,6 @@ venv/
 *.egg-info/
 dist/
 build/
+
+# pytest
+.pytest_cache/

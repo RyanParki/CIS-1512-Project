@@ -2,6 +2,7 @@
 
 from abc import ABC, abstractmethod # abstract base classes for python
 import requests
+import random
 import logging
 from .config import Config
 
@@ -45,16 +46,28 @@ class GeocachingAPI(BaseAPI):
         return zip
 
 class SearchAPI(BaseAPI):
+    """
+    Returns random selection of $count images for the requested flower in the requsted color.
+    It is really important to set this custom GCP search engine to "safe mode"!
+    It is also really important to append " flower" to your search query!
+    """
     def __init__(self):
         super().__init__(Config.GOOGLE_SEARCH_API, Config.GOOGLE_API_KEY)
 
-    def query(self, params):
-        params.update({
+    def query(self, query, color, count):
+        self.params.update({
             'key': self.api_key,
-            'cx': Config.GOOGLE_SEARCH_ENG # this is a custom google search built in GCP.
+            'cx': Config.GOOGLE_SEARCH_ENG,
+            'q': f"{query} flower",
+            'ImgDominantColor': color,
+            'searchType' : 'image',
+            'imageColorType': 'color'
         })
-        self.logger.debug(f"params: {params}")
-        return self._make_request(self.base_url, params)
+        data = self._make_request(self.base_url, self.params)
+        pics = random.sample([image['link'] if 'image' in image['mime'] else None for image in data['items']], count)
+        self.logger.debug(f"Flower Image Links: {pics}")
+        return pics
+
 
 class PerenualAPI(BaseAPI):
     def __init__(self):
