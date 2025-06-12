@@ -84,6 +84,19 @@ class SearchAPI(BaseAPI):
 
 class PerenualAPI(BaseAPI):
     def __init__(self):
-        super().__init__(Config.GOOGLE_SEARCH_API, Config.GOOGLE_API_KEY)
+        super().__init__(Config.PERENUAL_API, Config.PERENUAL_API_KEY)
 
-    # fixme
+    def query(self, species):
+        self.params.update(
+            {
+                "key": self.api_key,
+                "q": species
+            }
+        )
+        # hack to avoid actually making API calls.
+        #info = self._make_request(self.base_url, self.params)
+        #details = self._make_request(f"{Config.PERENUAL_DETAILS_API}/info['data'][0]['id']", self.params)
+        import json
+        with open('prototyping/perenual_sample_details.json', 'r') as fd:
+            return json.load(fd)
+            

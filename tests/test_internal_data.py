@@ -19,8 +19,8 @@ def test_fred_random_flower(app):
 
 def test_USDA_lookup(app):
     boulder = '80301'    # CO
-    detroit = '48127'    # SE. MI
-    littlefork = '56613' # N. MN
+    detroit = '48127'    # MI
+    littlefork = '56613' # MN
     not_real = '111111'  # OH
     with app.app_context():
         assert USDAHardinessZone.lookup(sqa_db.session, boulder) == '6'

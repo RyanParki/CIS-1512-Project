@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 view_bp = Blueprint("view", __name__)
 controller_bp = Blueprint("controller", __name__)
 
-# flower_api = PerenualAPI() # pending some UI design work
+flower_api = PerenualAPI()
 maps_api = GeocachingAPI()
 search_api = SearchAPI()
 
@@ -31,14 +31,18 @@ def get_fred_flower():
     color = request.form.get("choice")
     flower = FredFlower.fred_random_flower(sqa_db.session, color)
     logger.info(f"User selected {color}, fredDB fetched {flower}")
-    # Hardcoding this to picsum so nobody runs up my GCP bill.
-    # pics = search_api.query(flower, color, 4)
+    # pics = search_api.query(flower, color, 4) # Hardcoding this for now.
     pics = [pic for pic in ["https://picsum.photos/200"] for _ in range(4)]
     logger.info(f"Flower image links: {pics}")
     return (
         render_template("plant-pics-n-div.html", data={"flower": flower, "pics": pics}),
         200,
     )
+
+@view_bp.route("/api/perenual-plant-details", methods=["POST"])
+def get_plant_details():
+    logger.debug(flower_api.query('chamaebuxus'))
+    return 'test', 200
 
 
 @controller_bp.route("/api/fred-colors", methods=["GET"])

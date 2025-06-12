@@ -2,8 +2,9 @@ import os
 
 
 class Config:
-    PEREUNAL_API_KEY = os.environ.get("PERENUAL_API_KEY")
-    PEREUNAL_API = "https://perenual.com/api/v2/species-list"
+    PERENUAL_API_KEY = os.environ.get("PERENUAL_API_KEY")
+    PERENUAL_API = "https://perenual.com/api/v2/species-list"
+    PERENUAL_DETAILS_API = "https://perenual.com/api/v2/species/details"
     GOOGLE_API_KEY = os.environ.get("GOOGLE_GEOLOC_API")
     GOOGLE_MAPS_API = "https://maps.googleapis.com/maps/api/geocode/json"
     GOOGLE_SEARCH_API = "https://www.googleapis.com/customsearch/v1"
