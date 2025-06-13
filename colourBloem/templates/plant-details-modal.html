@@ -1,0 +1,29 @@
+<div class="modal-overlay" id="modal-overlay">
+    <div class="modal">
+        <button class="modal-close" onclick="closeModal()">✕</button>
+        <h2>{{ plant.common_name }}</h2>
+        <p><strong>Scientific Name:</strong> {{ plant.scientific_name[0] }}</p>
+        <p><strong>Type:</strong> {{ plant.type | capitalize }}</p>
+        <p><strong>Description:</strong> {{ plant.description }}</p>
+        <p><strong>Sunlight:</strong> {{ plant.sunlight | join(', ') }}</p>
+        <p><strong>Watering:</strong> {{ plant.watering }} (every {{ plant.watering_general_benchmark.value }} {{ plant.watering_general_benchmark.unit }})</p>
+        <p><strong>Watering Times:</strong> {{ plant.xWateringPeriod | join(' or ') }}</p>
+        <p><strong>Water pH:</strong> {{ plant.xWateringPhLevel.min }}–{{ plant.xWateringPhLevel.max }}</p>
+        <p><strong>Hardiness Zone:</strong> {{ plant.hardiness.min }}</p>
+        <p><strong>Growth Rate:</strong> {{ plant.growth_rate }}</p>
+        <p><strong>Maintenance:</strong> {{ plant.maintenance }}</p>
+        <p><strong>Care Level:</strong> {{ plant.care_level }}</p>
+        <p><strong>Flowering Season:</strong> {{ plant.flowering_season or 'N/A' }}</p>
+        <p><strong>Pruning:</strong> {{ plant.pruning_count.amount }} time(s) {{ plant.pruning_count.interval }} in {{ plant.pruning_month | join(' or ') }}</p>
+        <p><strong>Attracts:</strong> {{ plant.attracts | join(', ') }}</p>
+        <p><strong>Propagation:</strong> {{ plant.propagation | join(', ') }}</p>
+        <p><strong>Medicinal:</strong> {{ 'Yes' if plant.medicinal else 'No' }}</p>
+        <p><strong>Poisonous to Humans/Pets:</strong> {{ 'No' if not plant.poisonous_to_humans and not plant.poisonous_to_pets else 'Yes' }}</p>
+    </div>
+</div>
+
+<script>
+function closeModal() {
+    document.getElementById('modal-overlay').remove();
+}
+</script>

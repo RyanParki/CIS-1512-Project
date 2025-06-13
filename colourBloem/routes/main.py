@@ -39,10 +39,12 @@ def get_fred_flower():
         200,
     )
 
-@view_bp.route("/api/perenual-plant-details", methods=["POST"])
-def get_plant_details():
-    logger.debug(flower_api.query('chamaebuxus'))
-    return 'test', 200
+@view_bp.route("/api/perenual-plant-details/<string:species>", methods=["GET"])
+def get_plant_details(species):
+    details = flower_api.query(species)
+    details['common_name']: species
+    logger.debug(f"details requested for {species}")
+    return render_template("plant-details-modal.html", plant=details)
 
 
 @controller_bp.route("/api/fred-colors", methods=["GET"])

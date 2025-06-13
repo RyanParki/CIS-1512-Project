@@ -6,4 +6,8 @@
         <img src="{{ flower }}">
         {% endfor %}
     </div>
+    <button hx-get="/api/perenual-plant-details/{{ data['flower'].split(' ') | last }}" hx-target="#modal-container" hx-swap="innerHTML">
+            Show Plant Details
+    </button>
+<div id="modal-container"></div>
 </div>
