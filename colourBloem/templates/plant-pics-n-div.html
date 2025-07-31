@@ -1,13 +1,17 @@
-<div class="flower-gallery">
-    <h2 class="flower-gallery-title">{{ data['flower'] }}</h2>
-    <p><i>colors may vary by region</i></p>
-    <div class="flower-grid">
+<div class="flower-gallery max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <h2 class="flower-gallery-title text-3xl font-bold text-gray-900 mb-4">{{ data['flower'] }}</h2>
+    <p class="text-gray-600 italic mb-6">colors may vary by region</p>
+    <div class="flower-grid grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {% for flower in data['pics'] %}
-        <img src="{{ flower }}">
+        <img src="{{ flower }}" class="w-full h-64 object-cover rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
         {% endfor %}
     </div>
-    <button hx-get="/api/perenual-plant-details/{{ data['flower'].split(' ') | last }}" hx-target="#modal-container" hx-swap="innerHTML">
-            Show Plant Details
+    <button 
+        hx-get="/api/perenual-plant-details/{{ data['flower'].split(' ') | last }}" 
+        hx-target="#modal-container" 
+        hx-swap="innerHTML"
+        class="mt-8 px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors duration-300">
+        Show Plant Details
     </button>
-<div id="modal-container"></div>
+    <div id="modal-container" class="mt-6"></div>
 </div>

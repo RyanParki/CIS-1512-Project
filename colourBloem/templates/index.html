@@ -1,139 +1,62 @@
-<!-- prototype for colourBloem -->
-<html>
-    <head>
-        <title>colourBloem CIS 1512</title>
-        <link rel="icon" href="{{ url_for('static', filename='favicon.png') }}" type="image/x-icon">
-        <script src="https://unpkg.com/htmx.org@2.0.2"></script>
-        <script src="{{ url_for('static', filename='colorPicker.js') }}"></script>
-        <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='colourBloem_style.css') }}"/>
-    </head>
-    <body>
-        <div id="header">
-            <p>
-                <h1>colourBloem Prototype - CIS 1512</h1>
-            </p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>colorBloem</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="{{ url_for('static', filename='favicon.png') }}" type="image/x-icon">
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3&family=Laila&display=swap" rel="stylesheet">
+  <!-- HTMX CDN -->
+  <script src="https://unpkg.com/htmx.org@2.0.2"></script>
+  <!-- color picker JS -->
+  <script src="{{ url_for('static', filename='colorPicker.js') }}"></script>
+  <!-- our custom CSS -->
+  <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='colourBloem_style.css') }}"/>
+</head>
+<body class="font-sans antialiased bg-gray-100 min-h-screen w-full flex flex-col">
+  <!-- Main Section -->
+  <section class="py-16 flex-grow">
+    <div class="container mx-auto max-w-3xl px-4">
+      <div class="flex flex-col items-center text-center">
+        <h1 class="text-4xl md:text-5xl font-bold font-laila mb-4">colourBloem</h1>
+        <div id="content" class="space-y-6">
+          <h2 class="text-2xl md:text-3xl font-bold font-laila mb-4">Find your perfect garden palette</h2>
+          <p class="text-lg text-gray-600 mb-6">
+            Ready to fill your space with color? Explore plants that thrive in your area and match your unique style. Connect with fellow gardeners, swap ideas, and let your outdoor oasis bloom.
+          </p>
+          <a 
+            href="#" 
+            class="inline-block bg-blue-600 text-white px-6 py-3 rounded-md hover:bg-blue-700 transition" 
+            hx-get="/color-picker" 
+            hx-target="#content" 
+            hx-swap="innerHTML"
+          >
+            Start now
+          </a>
         </div>
-        <div id="example_db_query">
-            <p>
-                Available colors from FReD data: {{ color_list | join(', ')}}
-            </p>
-        </div>
-    <!-- The browser location area -->
-        <div id="response">
-            Loading location data...
-        </div>
-        <form id="location-form" hx-post="/api/browser-location-zip" hx-target="#response" hx-swap="innerHTML">
-            <input type="hidden" name="latitude" id="latitude">
-            <input type="hidden" name="longitude" id="longitude">
-        </form>
+      </div>
+    </div>
+  </section>
 
-    <!-- The fancy colorPicker widget area -->
-        <!-- Color Picker Container -->
-        <div class="color-picker-container">
-            <div id="colorGrid" class="color-grid">
-                <div class="loading">Loading colors...</div>
-            </div>
-        </div>
-        <!-- Hidden form for htmx color call -->
-        <form id="colorForm" hx-post="/api/fred-plant-display" hx-target="#plant-response" hx-swap="innerHTML">
-            <input type="hidden" id="choice" name="choice">
-        </form>
+  <!-- Footer -->
+  <footer class="py-8">
+    <div class="container mx-auto px-4">
+      <div class="border-t border-gray-200 my-6"></div>
+      <div class="flex flex-col md:flex-row justify-between items-center">
+        <div class="text-gray-500 text-sm">© 2025 colorBloem. All rights reserved.</div>
+        <ul class="flex space-x-4 mt-4 md:mt-0">
+          <li><a href="#" class="text-gray-600 hover:text-blue-600 text-sm">Privacy</a></li>
+          <li><a href="#" class="text-gray-600 hover:text-blue-600 text-sm">Terms</a></li>
+          <li><a href="#" class="text-gray-600 hover:text-blue-600 text-sm">Cookies</a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
 
-    <!-- The FReD flower picker area - the old one
-        <div id="htmx_form_stuff">
-            old color picker:
-            <select name="choice" id="color-choice">
-                {% for color in color_list %}
-                <option value="{{ color }}">{{ color }}</option>
-                {% endfor %}
-            </select>
-            <button hx-post="/api/fred-plant"
-                    hx-include="[name='choice']"
-                    hx-target="#plant-response"
-                    hx-swap="innerHTML">
-                Select
-            </button>
-        </div>-->
-
-        <div id="plant-response">
-            <!-- API response will be rendered here -->
-             plant here
-        </div>
-
-        <div id="footer">
-            <p>
-                <h6> Credits:
-                    <ul>
-                        <li>Group 1 Developers
-                            <ul>
-                                <li>Mikey</li>
-                                <li>Ryan</li>
-                                <li>Dyamond</li>
-                                <li>Jett</li>
-                                <li>David</li>
-                            </ul>
-                        </li>
-                        <li>Data Sources
-                            <ul>
-                                <li>FReD Flower Reflectance Database (heavily sanitized)</li>
-                                <li>USDA Plant Hardiness Zones</li>
-                                <li>Perenual.com Plant API</li>
-                                <li>Google Location API</li>
-                            </ul>
-                        </li>
-                        <li>Backend
-                            <ul>
-                                <li>sqlite3</li>
-                                <li>Python Flask</li>
-                            </ul>
-                        </li>
-                        <li>Frontend
-                            <ul>
-                                <li>htmx</li>
-                                <li>some css framework we haven't picked out yet</li>
-                            </ul>
-                        </li>
-                    </ul>
-                </h6>
-            </p>   
-
-        </div>
-    </body>
-
-    <!-- This script is a bit of a hack, it basically populates the hidden form above with the browser's location.
-         The hidden htmx form will post itself to the api endpoint for /api/browser-location-zip to get a zipCode.
-      -->
-      <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const responseDiv = document.getElementById('response');
-            const latitudeInput = document.getElementById('latitude');
-            const longitudeInput = document.getElementById('longitude');
-    
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(
-                    (position) => {
-                        // Set form input values
-                        latitudeInput.value = position.coords.latitude;
-                        longitudeInput.value = position.coords.longitude;
-    
-                        // Manually trigger HTMX AJAX request
-                        htmx.ajax('POST', '/api/browser-location-zip', {
-                            target: '#response',
-                            swap: 'innerHTML',
-                            values: {
-                                latitude: position.coords.latitude,
-                                longitude: position.coords.longitude
-                            }
-                        });
-                    },
-                    (error) => {
-                        // Handle geolocation errors
-                        responseDiv.innerHTML = `<p>Error getting location: ${error.message}</p>`;
-                    }
-                );
-            } else {
-                responseDiv.innerHTML = '<p>Geolocation is not supported by this browser.</p>';
-            }
-        });
-    </script>
+  <!-- jQuery CDN -->
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+</body>
 </html>

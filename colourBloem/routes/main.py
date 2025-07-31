@@ -21,6 +21,9 @@ search_api = SearchAPI()
 def index():
     return render_template("index.html"), 200
 
+@view_bp.route("/color-picker", methods=["GET"])
+def render_color_picker():
+    return render_template("colorpicker-widget.html"), 200
 
 @view_bp.route("/api/fred-plant-display", methods=["POST"])
 def get_fred_flower():

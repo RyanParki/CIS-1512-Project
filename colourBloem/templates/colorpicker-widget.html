@@ -1,0 +1,11 @@
+<!-- Returned by Flask /color-picker endpoint -->
+<div class="space-y-6">
+    <h2 class="text-2xl md:text-3xl font-bold font-laila mb-4">Choose a Color</h2>
+    <!-- <div id="colorGrid" class="grid grid-cols-3 gap-4">  WE FLEXBOX-->
+    <div id="colorGrid" class="flex flex-wrap justify-center gap-4 max-w-3xl">
+      <!-- Colors will be populated by initializeColorPicker -->
+    </div>
+    <form id="colorForm" hx-post="/api/fred-plant-display" hx-target="#content" hx-swap="innerHTML">
+      <input type="hidden" id="choice" name="choice">
+    </form>
+  </div>

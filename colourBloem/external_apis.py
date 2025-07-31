@@ -71,6 +71,7 @@ class SearchAPI(BaseAPI):
             }
         )
         data = self._make_request(self.base_url, self.params)
+        logger.debug(data)
         pics = random.sample(
             [
                 image["link"] if "image" in image["mime"] else None

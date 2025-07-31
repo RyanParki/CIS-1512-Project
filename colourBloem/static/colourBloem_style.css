@@ -1,12 +1,12 @@
 /* Flower gallery pane stuff */
 
 .flower-gallery {
-    background-color: #f8f8f8; /* Off-white background */
-    border-radius: 12px; /* Rounded edges */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Slight shadow */
+    background-color: #f8f8f8;
+    border-radius: 12px; 
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
     padding: 24px;
-    max-width: 600px; /* Adjust as needed */
-    margin: 0 auto; /* Center the container if needed */
+    max-width: 600px; 
+    margin: 0 auto; 
   }
   
   .flower-gallery-title {
@@ -18,17 +18,18 @@
   
   .flower-grid {
     display: grid;
-    grid-template-columns: repeat(2, 256px);
-    grid-template-rows: repeat(2, 256px);
-    gap: 16px; /* Space between images */
-    justify-content: center; /* Center the grid */
+    /*grid-template-columns: repeat(2, 256px); /* I'm disabling this for now, it works fine without doing fixed rows/columns like this */
+    /*grid-template-rows: repeat(2, 256px); */
+    gap: 16px;
+    justify-content: center;
   }
   
+  /* Note to self: I really want to make these images scale to the view but they should have a limited min-size. */
   .flower-grid img {
     width: 256px;
     height: 256px;
-    object-fit: cover; /* This ensures images fill the space without distortion */
-    border-radius: 8px; /* Optional: rounded corners for images */
+    object-fit: cover; 
+    border-radius: 8px; /* rounded image corners look nicer */
     display: block;
   }
 
@@ -71,28 +72,7 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
-.color-box::after {
-  content: attr(data-color);
-  position: absolute;
-  bottom: -25px;
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: rgba(0, 0, 0, 0.8);
-  color: white;
-  padding: 4px 8px;
-  border-radius: 4px;
-  font-size: 12px;
-  white-space: nowrap;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  pointer-events: none;
-}
-
-.color-box:hover::after {
-  opacity: 1;
-}
-
-/* Hidden form */
+/* Hidden form for htmx */
 #colorForm {
   display: none;
 }

@@ -1,39 +1,35 @@
-// Sample data from dev - replaced with fred colors.
-const colorData = [
-    { color: '#FF6B6B', name: 'Red' },
-    { color: '#4ECDC4', name: 'Turquoise' },
-    { color: '#45B7D1', name: 'Blue' },
-    { color: '#96CEB4', name: 'Green' },
-    { color: '#FECA57', name: 'Yellow' },
-    { color: '#FF9FF3', name: 'Pink' },
-    { color: '#54A0FF', name: 'Blue' },
-    { color: '#48DBFB', name: 'Blue' },
-    { color: '#A29BFE', name: 'Lavender' },
-    { color: '#FD79A8', name: 'Rose' },
-    { color: '#FDCB6E', name: 'Orange' },
-    { color: '#6C5CE7', name: 'Purple' }
-];
+// Global variable to store fetched colors
+let availableColors = null;
 
-// get the list of colors from the fred colors available endpoint
+// Get the list of colors from the fred colors available endpoint
 async function getColorsFromDB() {
+    console.log('querying api for available colors');
     try {
         const response = await fetch('/api/fred-colors');
         const data = await response.json();
         console.log('got this color payload from the api: ', data);
-        initializeColorPicker(data);
+        availableColors = data; // Store colors globally
+        // Check if #colorGrid exists and initialize if it does
+        if (document.getElementById('colorGrid')) {
+            initializeColorPicker(availableColors);
+        }
     } catch (error) {
         console.error('Error fetching colors:', error);
-        document.getElementById('colorGrid').innerHTML = 
-            '<div class="loading">Error loading colors</div>';
+        if (document.getElementById('colorGrid')) {
+            document.getElementById('colorGrid').innerHTML = 
+                '<div class="loading">Error loading colors</div>';
+        }
     }
 }
 
 // Function to initialize the color picker
 function initializeColorPicker(colors) {
-
     console.log('Init color picker...');
-
     const colorGrid = document.getElementById('colorGrid');
+    if (!colorGrid) {
+        console.log('Color grid not found, skipping initialization');
+        return;
+    }
     colorGrid.innerHTML = ''; // Clear loading message
 
     colors.forEach(colorItem => {
@@ -42,8 +38,6 @@ function initializeColorPicker(colors) {
         colorBox.style.backgroundColor = colorItem.color;
         colorBox.setAttribute('data-color', colorItem.name || colorItem.color);
 
-        // click event, when the box is clicked, call the backend to start the fred render
-        // You could add a fancy animation here on click, so it spins like a loading thing or something??????????????
         colorBox.addEventListener('click', function() {
             selectColor(colorItem.name); // colorItem.color is the hex val, dont use that
         });
@@ -52,29 +46,25 @@ function initializeColorPicker(colors) {
     });
 }
 
-// submit the hidden form to call the backend and initiate the flower search and render
+// Submit the hidden form to call the backend and initiate the flower search and render
 function selectColor(color) {
-    document.getElementById('choice').value = color;
-    console.log('selected color: ', color);
-    htmx.trigger('#colorForm', 'submit');
-    //document.getElementById('colorForm').submit(); // mot f
-    console.log('form submitted for: ', color);
-
-    // we can use this to make the color box change when it's clicked.
-    // apparently this is deprecated and I have to learn a new thing if we want to use this
-    //event.target.style.transform = 'scale(1.5)';
-    //setTimeout(() => {
-    //    event.target.style.transform = '';
-    //}, 200);
+    const colorForm = document.getElementById('colorForm');
+    if (colorForm) {
+        document.getElementById('choice').value = color;
+        console.log('selected color: ', color);
+        htmx.trigger('#colorForm', 'submit');
+        console.log('form submitted for: ', color);
+    } else {
+        console.error('Color form not found');
+    }
 }
 
-// Simulated database fetch - Replace with actual API call
-function fetchColorData() {
-    // Simulate async database fetch
-    setTimeout(() => {
-        initializeColorPicker(colorData);
-    }, 500);
-}
-
-// Initialize on page load
+// Initialize colors fetch on page load
 document.addEventListener('DOMContentLoaded', getColorsFromDB);
+
+// Listen for HTMX after-swap event to initialize color picker when #colorGrid is loaded
+document.addEventListener('htmx:afterSwap', function(event) {
+    if (event.detail.target.id === 'content' && availableColors && document.getElementById('colorGrid')) {
+        initializeColorPicker(availableColors);
+    }
+});
