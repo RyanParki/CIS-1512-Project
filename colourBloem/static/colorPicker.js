@@ -1,4 +1,5 @@
 // Global variable to store fetched colors
+// I am not sure if globals are appropriate here or not, but it works.
 let availableColors = null;
 
 // Get the list of colors from the fred colors available endpoint
@@ -11,7 +12,7 @@ async function getColorsFromDB() {
         availableColors = data; // Store colors globally
         // Check if #colorGrid exists and initialize if it does
         if (document.getElementById('colorGrid')) {
-            initializeColorPicker(availableColors);
+            initializeColorPicker(availableColors); 
         }
     } catch (error) {
         console.error('Error fetching colors:', error);

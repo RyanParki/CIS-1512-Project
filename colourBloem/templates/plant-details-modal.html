@@ -10,6 +10,7 @@
         <p><strong>Watering Times:</strong> {{ plant.xWateringPeriod | join(' or ') }}</p>
         <p><strong>Water pH:</strong> {{ plant.xWateringPhLevel.min }}–{{ plant.xWateringPhLevel.max }}</p>
         <p><strong>Hardiness Zone:</strong> {{ plant.hardiness.min }}</p>
+        <p><strong>Your Hardiness Zone:</strong><p id="your-zone">Loading</p></p>
         <p><strong>Growth Rate:</strong> {{ plant.growth_rate }}</p>
         <p><strong>Maintenance:</strong> {{ plant.maintenance }}</p>
         <p><strong>Care Level:</strong> {{ plant.care_level }}</p>
@@ -26,4 +27,8 @@
 function closeModal() {
     document.getElementById('modal-overlay').remove();
 }
+</script>
+<script>
+    document.getElementById('your-zone').textContent = hardinessZone || 'Loading location...';
+    console.log("The zone is ", hardinessZone);
 </script>

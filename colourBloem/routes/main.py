@@ -62,25 +62,35 @@ def get_flower_colors():
     return colors, 200
 
 
-# is this supposed to be a view function instead? depends on UI design.
-# maybe there is a similar view function that renders a div for the initial "your zone is.."
-# and this is used for the "Your distance from the selected plants zone is..."
 @controller_bp.route("/api/browser-location-zip", methods=["POST"])
 def get_hardiness_zone():
-    latitude = request.form.get("latitude")
-    longitude = request.form.get("longitude")
+    """
+    For performance reasons, this gets called on page load, and the return
+    is stored in a js variable. It is rendered in the plant-details-modal.
+    return: hardiness zone
+    rtype: str
+    """
+    logger.debug(f"Browser-location-zip called with {request.json}")
+    
+    try:
+        latitude = request.json.get("latitude")
+        longitude = request.json.get("longitude")
+    except:
+        logger.error(f"There was an error decoding {request.data}")
+        return f"Error with this location data: {request.data}", 400
+
     logger.debug(f"Querying Google GeoCaching API for {latitude},{longitude}")
     # zipcode = maps_api.query(longitude, latitude) # fangs removed for testing.
-    zipcode = "48072"
+    zipcode = "48072" # hardcoded zip for testing purposes.
     logger.debug(f"User's zipcode via browser location google geocaching is: {zipcode}")
     zone = USDAHardinessZone.lookup(sqa_db.session, zipcode)
-    return f"ur zone is {zone}", 200
+    return str(zone), 200
 
 
 @controller_bp.route("/api/hello", methods=["GET"])
 def hello():
     """
-    Test that everything has ostensibly loaded properly.
+    Test that everything has ostensibly loaded properly. Used for dev and testing.
     """
     logger.debug("Hello from the test endpoint")
     return "<p> hello from the controller api blueprint, it works </p>", 200
