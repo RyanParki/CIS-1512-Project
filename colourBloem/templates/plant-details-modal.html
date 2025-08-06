@@ -7,7 +7,7 @@
         <p><strong>Description:</strong> {{ plant.description }}</p>
         <p><strong>Sunlight:</strong> {{ plant.sunlight | join(', ') }}</p>
         <p><strong>Watering:</strong> {{ plant.watering }} (every {{ plant.watering_general_benchmark.value }} {{ plant.watering_general_benchmark.unit }})</p>
-        <p><strong>Watering Times:</strong> {{ plant.xWateringPeriod | join(' or ') }}</p>
+        <!-- <p><strong>Watering Times:</strong> {{ plant.xWateringPeriod | join(' or ') }}</p> --> <!-- this is a weird format i dont want to mess with -->
         <p><strong>Water pH:</strong> {{ plant.xWateringPhLevel.min }}–{{ plant.xWateringPhLevel.max }}</p>
         <p><strong>Hardiness Zone:</strong> {{ plant.hardiness.min }}</p>
         <p><strong>Your Hardiness Zone:</strong><p id="your-zone">Loading</p></p>

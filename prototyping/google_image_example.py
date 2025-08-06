@@ -15,12 +15,16 @@ response = requests.get(url)
 
 if response.status_code == 200:
     data = response.json()
-    #print(data['items'].keys())
-    for item in data['items']:GOOGLE_CUSTOM_SEARCHENGINE
-        if 'image' in item['mime']:
-            print(f"Link: {item['link']}")
-        else:
-            print(f"Not an image, mime: {item['mime']}")
+    for item in data["items"]:
+        print(item['link'])
+        break
+
+    # print(data['items'].keys())
+    # for item in data['items']:
+    #     if 'image' in item['mime']:
+    #         print(f"Link: {item['link']}")
+    #     else:
+    #         print(f"Not an image, mime: {item['mime']}")
 else:
     print(f"HTTP Error: {response.status_code}")
-    print(response.text)GOOGLE_CUSTOM_SEARCHENGINE
+    print(response.text)

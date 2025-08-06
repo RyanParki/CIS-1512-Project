@@ -67,11 +67,11 @@ class SearchAPI(BaseAPI):
                 "q": f"{query} flower",
                 "ImgDominantColor": color,
                 "searchType": "image",
-                "imageColorType": "color",
+                "imageColorType": "color"
             }
         )
         data = self._make_request(self.base_url, self.params)
-        logger.debug(data)
+        self.logger.debug(data)
         pics = random.sample(
             [
                 image["link"] if "image" in image["mime"] else None
@@ -94,10 +94,13 @@ class PerenualAPI(BaseAPI):
                 "q": species
             }
         )
+        
+        info = self._make_request(self.base_url, self.params)
+        plant_id = info['data'][0]['id']
+        details = self._make_request(f"{Config.PERENUAL_DETAILS_API}/{plant_id}", self.params)
+        return details
         # hack to avoid actually making API calls.
-        #info = self._make_request(self.base_url, self.params)
-        #details = self._make_request(f"{Config.PERENUAL_DETAILS_API}/info['data'][0]['id']", self.params)
-        import json
-        with open('prototyping/perenual_sample_details.json', 'r') as fd:
-            return json.load(fd)
+        # import json
+        # with open('prototyping/perenual_sample_details.json', 'r') as fd:
+        #     return json.load(fd)
             

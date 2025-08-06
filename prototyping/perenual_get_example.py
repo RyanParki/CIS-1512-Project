@@ -17,10 +17,11 @@ if my_api_key:
     response = requests.get(f'https://perenual.com/api/v2/species-list?key={my_api_key}&q={encoded_species}')
 
 print(response.text)
-print(f"id: {response.json()['data'][0]['id']}")
+plant_id = response.json()['data'][0]['id']
+print(plant_id)
 
-if id is not None:
-    detail_response = requests.get(f'https://perenual.com/api/v2/species/details/{id}?key={my_api_key}')
+if plant_id is not None:
+    detail_response = requests.get(f'https://perenual.com/api/v2/species/details/{plant_id}?key={my_api_key}')
 
 print(detail_response.text)
 

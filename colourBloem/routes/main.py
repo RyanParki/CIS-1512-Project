@@ -34,8 +34,8 @@ def get_fred_flower():
     color = request.form.get("choice")
     flower = FredFlower.fred_random_flower(sqa_db.session, color)
     logger.info(f"User selected {color}, fredDB fetched {flower}")
-    # pics = search_api.query(flower, color, 4) # Hardcoding this for now.
-    pics = [pic for pic in ["https://picsum.photos/200"] for _ in range(4)]
+    pics = search_api.query(flower, color, 4)
+    #pics = [pic for pic in ["https://picsum.photos/200"] for _ in range(4)] # Hardcoding this for testing.
     logger.info(f"Flower image links: {pics}")
     return (
         render_template("plant-pics-n-div.html", data={"flower": flower, "pics": pics}),
@@ -80,8 +80,8 @@ def get_hardiness_zone():
         return f"Error with this location data: {request.data}", 400
 
     logger.debug(f"Querying Google GeoCaching API for {latitude},{longitude}")
-    # zipcode = maps_api.query(longitude, latitude) # fangs removed for testing.
-    zipcode = "48072" # hardcoded zip for testing purposes.
+    zipcode = maps_api.query(longitude, latitude) # fangs removed for testing.
+    #zipcode = "48072" # hardcoded zip for testing purposes.
     logger.debug(f"User's zipcode via browser location google geocaching is: {zipcode}")
     zone = USDAHardinessZone.lookup(sqa_db.session, zipcode)
     return str(zone), 200
